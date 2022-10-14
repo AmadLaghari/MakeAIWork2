@@ -64,7 +64,7 @@ def roulette( colorChoice):
          #randomizer link with black/red
         if randomizer == 0:
             result = "Black"
-        elif:
+        else:
             result = "Red"
         # randomizer and color choice match
         if result == choice:
