@@ -21,10 +21,10 @@ title = "Roulette"
 button_list = []
   
 # button 1
-button1 = "zwart"
+button1 = "Zwart"
   
 # second button
-button2 = "rood"
+button2 = "Rood"
   
 # appending button to the button list
 button_list.append(button1)
@@ -44,28 +44,34 @@ msg = msgbox(message, title)
 
 
 
-bank = int(simpledialog.askstring(title="Test",
-                                  prompt="Hoeveel wil je inzetten per spin:"))
 
-inzet = int(simpledialog.askstring(title="Test",
+bank = int(simpledialog.askstring(title="Test",
                                   prompt="Totaal speelgeld:"))
 
 herhalingen = int(simpledialog.askstring(title="Test",
-                                  prompt="Hoeveel herhalingen?:"))
+                                  prompt="Aantal herhalingen?:"))
+
+inzet = bank/herhalingen
+
+msgbox(f"Inzet per spin: {int(inzet)} euro \n {herhalingen} herhalingen op de kleur: {colorChoice}")
 
 def roulette( colorChoice, bank, inzet, herhalingen):
     #Colorchoice from input black/red
-    if colorChoice == "zwart":
+    if colorChoice == "Zwart":
         choice = "Black"
-    elif colorChoice == "rood":
+    elif colorChoice == "Rood":
         choice = "Red"
     else:
         print("Ongeldige keuze")
 
     newbank = []
-    rounds = 0
+    rounds = 1
     # inzet = 10
-    totalRounds = []
+    totalRounds = 1
+    lost = []
+    totalLost = 0
+    totalWon = 0
+    totalBank = bank 
 
     while bank > 0:
         randomizer = random.randint(0,1)
@@ -75,28 +81,37 @@ def roulette( colorChoice, bank, inzet, herhalingen):
         else:
             result = "Red"
         # randomizer and color choice match
+        # Bank update
         if result == choice:
-            match = True
-        else:
-            match = False
-        #Bank update
-        if match == True:
             bank += inzet
             print("Bet won! New Bank ", bank)
+            totalWon += 1
         else:
             bank -= inzet
             print("Bet lost! New Bank ",  bank)
-        if rounds > herhalingen:
+            totalLost += 1
+        if rounds >= herhalingen :
             break
-
+        elif bank <= 0:
+            msgbox(f"Speelgeld: 0 euro. U heeft alles verloren")
+            lost.append(1)
+        else:
+            print("round ", rounds)
+            totalRounds += 1
+            newbank.append(bank)
         # number of rounds
         rounds += 1
-        print("round ", rounds)
-        totalRounds.append(rounds)
-        newbank.append(bank)
+    print(newbank[-1])
+    winlose =  newbank[-1] - totalBank
+    print(winlose)
+    if winlose > 0 or winlose == 0: 
+        if bank > 10:
+            msgbox(f" \n Ronden: {totalRounds} \n Jouw Bank {newbank[-1]} \n Aantal keer gewonnen: {totalWon} \n Aantal keer verloren: {totalLost} \n Totale inzet: {totalBank} \n \n Gefeliciteerd! Je hebt {winlose} euro gewonnen!  ")
+    elif winlose < 0:
+        if bank > 10:
+            msgbox(f"\n Ronden  {totalRounds} \n Jouw Bank {newbank[-1]} \n Aantal keer gewonnen: {totalWon} \n Aantal keer verloren: {totalLost} \n Totale inzet: {totalBank} \n \nHelaas! Je hebt {totalBank - newbank[-1]} euro verloren  ")
 
-    msgbox(f"Aantal Rondes  {max(totalRounds)} Je hebt {max(newbank)} euro gewonnen")
-        
+
 
         
             
