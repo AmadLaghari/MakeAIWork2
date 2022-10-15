@@ -51,7 +51,7 @@ bank = int(simpledialog.askstring(title="Test",
 herhalingen = int(simpledialog.askstring(title="Test",
                                   prompt="Aantal herhalingen?:"))
 
-inzet = bank/herhalingen
+inzet = int(bank)/int(herhalingen)
 
 msgbox(f"Inzet per spin: {int(inzet)} euro \n {herhalingen} herhalingen op de kleur: {colorChoice}")
 
@@ -101,15 +101,17 @@ def roulette( colorChoice, bank, inzet, herhalingen):
             newbank.append(bank)
         # number of rounds
         rounds += 1
-    print(newbank[-1])
-    winlose =  newbank[-1] - totalBank
-    print(winlose)
-    if winlose > 0 or winlose == 0: 
+    newbankValue = round(newbank[-1],2)
+    win =  round((newbankValue - totalBank),2)
+    lose =  round((totalBank - newbankValue),2)
+    print(lose)
+
+    if win> 0 or win == 0: 
         if bank > 10:
-            msgbox(f" \n Ronden: {totalRounds} \n Jouw Bank {newbank[-1]} \n Aantal keer gewonnen: {totalWon} \n Aantal keer verloren: {totalLost} \n Totale inzet: {totalBank} \n \n Gefeliciteerd! Je hebt {winlose} euro gewonnen!  ")
-    elif winlose < 0:
+            msgbox(f" \n Ronden: {totalRounds} \n Jouw Bank {newbankValue} euro \n Aantal keer gewonnen: {totalWon} \n Aantal keer verloren: {totalLost} \n Totale inzet: {totalBank} euro \n \n Gefeliciteerd! Je hebt {win} euro gewonnen!  ")
+    elif win < 0:
         if bank > 10:
-            msgbox(f"\n Ronden  {totalRounds} \n Jouw Bank {newbank[-1]} \n Aantal keer gewonnen: {totalWon} \n Aantal keer verloren: {totalLost} \n Totale inzet: {totalBank} \n \nHelaas! Je hebt {totalBank - newbank[-1]} euro verloren  ")
+            msgbox(f"\n Ronden  {totalRounds} \n Jouw Bank {newbankValue} euro \n Aantal keer gewonnen: {totalWon} \n Aantal keer verloren: {totalLost} \n Totale inzet: {totalBank} euro \n \nHelaas! Je hebt {lose} euro verloren  ")
 
 
 
