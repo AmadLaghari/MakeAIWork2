@@ -39,7 +39,7 @@
 
 # Input:
 
-# solution.solution(["1.11", "2.0.0", "1.2", "2", "0.1", "1.2.1", "1.1.1", "2.0"])
+solution = ["1.11", "2.0.0", "1.2", "2", "0.1", "1.2.1", "1.1.1", "2.0"]
 
 # Output:
 
@@ -48,7 +48,7 @@
 
 # Input:
 
-solution = ["1.1.2", "1.0", "1.3.3", "1.0.12", "1.0.2"]
+# solution = ["1.1.2", "1.0", "1.3.3", "1.0.12", "1.0.2"]
 
 # Output:
 
@@ -62,41 +62,17 @@ solution = ["1.1.2", "1.0", "1.3.3", "1.0.12", "1.0.2"]
 
 res_list = []
 for i in solution:
-    j = i.split('.') 
-    res_list.append(j)
+    res_Split = i.split('.') 
+    res_list.append(res_Split)
 
-print(sorted(res_list))
+int_Array = []
+for i in res_list:
+    int_Array_loop = []
+    for j in i:
+        # print(type(y))
+        int_Array_loop.append(int(j))
+    int_Array.append(int_Array_loop)
 
+sorted_Array= sorted(int_Array)
 
-
-
-# rev_ = []
-# minor = []
-# major = []
-
-# for j in res_list:
-#     try:
-#        rev = int(j[2])
-#     except:
-#         rev = ''
-#     try:
-#          minor = int(j[1])
-#     except:
-#         ""
-#     try:
-#         major = int(j[0])
-#     except:
-#         ""
-#     rev.append(rev)
-
-g = []
-for i in solution:
-    print(i[0])
-    print(i[2])
-    print
-
-
-# print(int_values)
-
-# print(sorted(int_values))
 
