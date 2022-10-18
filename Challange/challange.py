@@ -40,7 +40,8 @@ from tkinter import simpledialog
 
 
 # Inputs:
-decryption_input= "wrw blf hvv ozhg mrtsg’h vkrhlwv?"
+decryption_input= "Yvzs! I xzm’g yvorvev Lzmxv olhg srh qly zg gsv xlolmb!!"
+output_label = "Yeah! I can’t believe Lance lost his job at the colony!!"
 encryption_input = "I have solved the puzzle"
 
 
