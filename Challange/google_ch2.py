@@ -74,5 +74,5 @@ for i in res_list:
     int_Array.append(int_Array_loop)
 
 sorted_Array= sorted(int_Array)
-
+print(sorted_Array)
 
