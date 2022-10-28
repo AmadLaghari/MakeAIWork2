@@ -23,7 +23,7 @@ button_list = []
 # button 1
 button1 = "Zwart"
   
-# second button
+# second 2
 button2 = "Rood"
   
 # appending button to the button list
