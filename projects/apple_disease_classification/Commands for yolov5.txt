@@ -1,0 +1,7 @@
+> python detect.py --source 0  --weights best.pt --conf 0.25
+(best.pt is a model from yolov5)
+
+> labelImg
+(image labeling for yolo
+
+use Roboflow for data augmentation
