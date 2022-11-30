@@ -12,13 +12,13 @@ from keras.callbacks import EarlyStopping
 
 
 #UI
-choices = ["Model","+ Data Augmentation", "+ Early Stopping"]
-optie = buttonbox('Kies een optie', "Opties", choices = choices)
+# choices = ["Model","+ Data Augmentation", "+ Early Stopping"]
+# optie = buttonbox('Kies een optie', "Opties", choices = choices)
 
 data_dir = 'C:/Users/amad_/makeaiwork2/projects/apple_disease_classification/data/Train'
 
-img_height = 360
-img_width = 360
+img_height = 250
+img_width = 250
 batch_size = 32
 
 train_ds = tf.keras.utils.image_dataset_from_directory(
@@ -67,99 +67,40 @@ val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
 num_classes = len(class_names)
 
+import numpy as np
+import tkinter as tk
+from tkinter import simpledialog
+import tensorflow as tf
+import tensorflow.keras as keras
+from tensorflow.keras import layers
+from keras.models import Sequential
+import pathlib
 
-if "Data Augmentation" in optie:
-    #Data aug
-    data_augmentation = keras.Sequential(
-    [layers.RandomFlip("horizontal", input_shape=(img_height, img_width, 3)),
-        layers.RandomRotation(0.1),
-        layers.RandomZoom(0.1),])
-    
-    # Visualize a few augmented examples 
-    plt.figure(figsize=(10, 10))
-    for images, _ in train_ds.take(1):
-        for i in range(9):
-            augmented_images = data_augmentation(images)
-            ax = plt.subplot(3, 3, i + 1)
-            plt.imshow(augmented_images[0].numpy().astype("uint8"))
-            plt.axis("off")
-
-    model = Sequential([
-    data_augmentation,
-    layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
-    layers.Conv2D(16, 3, padding='same', activation='relu'),
-    layers.MaxPooling2D(),
-    layers.Conv2D(32, 3, padding='same', activation='relu'),
-    layers.MaxPooling2D(),
-    layers.Conv2D(64, 3, padding='same', activation='relu'),
-    layers.MaxPooling2D(),
-    layers.Flatten(),
-    layers.Dense(128, activation='relu'),
-    layers.Dense(num_classes)
-])
-
-else:
-    model = Sequential([
-    layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
-    layers.Conv2D(16, 3, padding='same', activation='relu'),
-    layers.MaxPooling2D(),
-    layers.Conv2D(32, 3, padding='same', activation='relu'),
-    layers.MaxPooling2D(),
-    layers.Conv2D(64, 3, padding='same', activation='relu'),
-    layers.MaxPooling2D(),
-    layers.Flatten(),
-    layers.Dense(128, activation='relu'),
-    layers.Dense(num_classes)
-])
+model = keras.models.load_model('C:/Users/amad_/makeaiwork2/projects/apple_disease_classification/models/new_model')
 
 
-model.compile(optimizer='adam',
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-              metrics=['accuracy'])
+link = simpledialog.askstring(title="Test",
+                                  prompt="link:")
+image_url = f"{link}"
+ind_link = link.rfind('/') +1
 
-model.summary()
 
-if "Early Stopping" in optie:
-    es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience = 0)
-    history = model.fit(
-        train_ds, 
-        validation_data=val_ds, 
-        epochs=10, 
-        validation_split=0.25, 
-        batch_size=40, 
-        verbose=0, 
-        callbacks=[es]) 
+url_str = image_url[ind_link:(len(image_url))]
 
-    plt.plot(history.history['loss'], label='train')
-    plt.plot(history.history['val_loss'], label='test')
-    plt.legend()
-    plt.show()
-else:
-    epochs=10
-    history = model.fit(
-    train_ds,
-    validation_data=val_ds,
-    epochs=epochs
-    )
 
-    acc = history.history['accuracy']
-    val_acc = history.history['val_accuracy']
+image_path = tf.keras.utils.get_file(url_str, origin=link)
 
-    loss = history.history['loss']
-    val_loss = history.history['val_loss']
+img = tf.keras.utils.load_img(
+    image_path, target_size=(img_height, img_width)
+)
+img_array = tf.keras.utils.img_to_array(img)
+img_array = tf.expand_dims(img_array, 0) # Create a batch
 
-    epochs_range = range(epochs)
+predictions = model.predict(img_array)
+score = tf.nn.softmax(predictions[0])
 
-    plt.figure(figsize=(8, 8))
-    plt.subplot(1, 2, 1)
-    plt.plot(epochs_range, acc, label='Training Accuracy')
-    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
-    plt.legend(loc='lower right')
-    plt.title('Training and Validation Accuracy')
+print(
+    "This image most likely belongs to {} with a {:.2f} percent confidence."
+    .format(class_names[np.argmax(score)], 100 * np.max(score))
+)
 
-    plt.subplot(1, 2, 2)
-    plt.plot(epochs_range, loss, label='Training Loss')
-    plt.plot(epochs_range, val_loss, label='Validation Loss')
-    plt.legend(loc='upper right')
-    plt.title('Training and Validation Loss')
-    plt.show()
